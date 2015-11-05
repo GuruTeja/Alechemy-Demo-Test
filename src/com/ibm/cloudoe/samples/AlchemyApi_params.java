@@ -2,8 +2,6 @@ package com.ibm.cloudoe.samples;
 
 import java.net.URLEncoder;
 import org.xml.sax.SAXException;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import java.io.*;
 
@@ -13,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,11 +45,12 @@ public class AlchemyApi_params {
 	
 	@GET
 	@Path("/search/{SearchKey}/{SearchUrl: (.+)?}")
-	public Response data(@PathParam("SearchKey") String SearchKey,@PathParam("SearchUrl") String SearchUrl) throws JSONException {
+	@Produces({MediaType.APPLICATION_JSON}) 
+	public Response data(@PathParam("SearchKey") String SearchKey,@PathParam("SearchUrl") String SearchUrl) {
 		System.out.println("Search Key is" + SearchKey);
 		System.out.println("Search Url is" + SearchUrl);
 		AlchemyAPI alchemyObj = new AlchemyAPI();
-		JSONObject obj = null;
+		String obj = null;
 		try{
 			obj =  alchemyObj.URLGetAuthor(SearchKey,SearchUrl);
 			
@@ -66,9 +66,10 @@ public class AlchemyApi_params {
 	
 	@GET
 	@Path("testing")
-	public JSONObject jsonData() throws JSONException{
+	@Produces({MediaType.APPLICATION_JSON}) 
+	public String jsonData(){
 		AlchemyAPI alchemyObj = new AlchemyAPI();
-		JSONObject obj =  null;
+		String obj =  null;
 		try {
 			obj = alchemyObj.URLGetAuthor("URLGetAuthors","http://www.politico.com/blogs/media/2012/02/detroit-news-ed-upset-over-romney-edit-115247.html");
 		} catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException e) {
@@ -82,11 +83,11 @@ public class AlchemyApi_params {
 
 	public static void main(String[] args)
 			throws IOException, SAXException,
-			ParserConfigurationException, XPathExpressionException, JSONException
+			ParserConfigurationException, XPathExpressionException
 		{
 			
 			AlchemyApi_params alechemy = new AlchemyApi_params();		
-			JSONObject output = alechemy.jsonData();
+			String output = alechemy.jsonData();
 
 		}
 	
